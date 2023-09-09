@@ -11,6 +11,26 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public StateAnimationSetDictionary StateAnimations { get; private set; }
     [field: SerializeField] public float WalkVelocityThreshold { get; private set; } = 0.05f;
 
+    public Enemy Target {
+        get { return target; }
+
+        private set {
+            if (target != null) {
+                TargetIndicator tar = target.GetComponentInChildren<TargetIndicator>();
+                tar.GetComponent<SpriteRenderer>().enabled = false;
+            }
+
+            if (value != null) {
+                TargetIndicator ti = value.GetComponentInChildren<TargetIndicator>();
+                ti.GetComponent<SpriteRenderer>().enabled = true;
+            }
+
+            target = value;
+        }
+    }
+
+    private Enemy target;
+
     public CharacterState CurrentState {
         get {
             return currentState;
@@ -106,6 +126,22 @@ public class PlayerController : MonoBehaviour
         }
 
         OnActionPress();
+    }
+
+    // Todo, change this signature and key bind
+    // This function cycles through available targets in the order they were added to the available target list
+    void OnAction2() {
+        if (GameManager.AvailableTargets.Count < 1) {
+            Target = null;
+            return;
+        }
+
+        if (!target) {
+            Target = GameManager.AvailableTargets[0];
+            return;
+        }
+
+        Target = GameManager.AvailableTargets.Next();
     }
 
     void OnActionPress() {

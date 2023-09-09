@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
-    public static bool IsPaused { get; private set; }
+    public static bool IsPaused { get; private set; } = false;
+    public static NavigationList<Enemy> AvailableTargets { get; set; } = new();
 
     public static GameManager Instance {
         get {
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     }
 
     public static void PauseUnpause() {
+        print(AvailableTargets);
         if (IsPaused) {
             Time.timeScale = 1;
             IsPaused = false;

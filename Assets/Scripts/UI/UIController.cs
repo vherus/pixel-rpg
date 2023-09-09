@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     [field: SerializeField] public GameObject EquipmentPanel;
+    [field: SerializeField] public ActionBar ActionBar;
 
     void Start() {
         EquipmentPanel.SetActive(false);

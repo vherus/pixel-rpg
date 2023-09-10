@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+/// <summary>
+/// Originally designed by Kryzarel with some minor changes
+/// </summary>
 [Serializable]
 public class Stat
 {

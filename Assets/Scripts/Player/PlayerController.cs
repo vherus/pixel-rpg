@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private Enemy target;
+    private TargetLock targetLock;
 
     public CharacterState CurrentState {
         get {
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         actionBar = GetComponent<ActionBar>();
+        targetLock = GetComponentInChildren<TargetLock>();
         CurrentState = Idle;
     }
 
@@ -65,6 +67,11 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.IsPaused) {
             return;
+        }
+
+        if (GameManager.AvailableTargets.Count < 1 || (Target && !GameManager.AvailableTargets.Contains(Target))) {
+            Target = null;
+            targetLock.Target = null;
         }
 
         timeToEndAnimation = Mathf.Max(timeToEndAnimation - Time.deltaTime, 0);
@@ -133,15 +140,30 @@ public class PlayerController : MonoBehaviour
     void OnAction2() {
         if (GameManager.AvailableTargets.Count < 1) {
             Target = null;
-            return;
-        }
-
-        if (!target) {
+        } else if (!target) {
             Target = GameManager.AvailableTargets[0];
-            return;
+        } else {
+            Target = GameManager.AvailableTargets.Next();
         }
 
-        Target = GameManager.AvailableTargets.Next();
+        targetLock.Target = Target;
+    }
+
+    // Dodge
+    void OnAction3() {
+        if (CurrentState == Walk) {
+            Vector2 moveForce = axisInput * (MoveForce * 16) * Time.fixedDeltaTime;
+            rb.AddForce(moveForce);
+        }
+    }
+
+    // Clear target
+    void OnAction8() {
+        if (target) {
+            target.GetComponentInChildren<TargetIndicator>().GetComponent<SpriteRenderer>().enabled = false;
+            target = null;
+            targetLock.Target = null;
+        }
     }
 
     void OnActionPress() {

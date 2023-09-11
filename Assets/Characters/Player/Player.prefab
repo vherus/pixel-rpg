@@ -5266,6 +5266,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 775dc3183c28576499868db53595e654, type: 2}
     - {fileID: 11400000, guid: 7bc461289920d21419fc5ab170388d25, type: 2}
   <WalkVelocityThreshold>k__BackingField: 0.05
+  SpellPrefab: {fileID: 5980836326568893168, guid: 7b2c9a2397545734c9e146eab0aa9cba, type: 3}
 --- !u!50 &5441252991165070213
 Rigidbody2D:
   serializedVersion: 4

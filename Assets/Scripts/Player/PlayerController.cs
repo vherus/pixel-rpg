@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public CharacterState Use { get; private set; }
     [field: SerializeField] public StateAnimationSetDictionary StateAnimations { get; private set; }
     [field: SerializeField] public float WalkVelocityThreshold { get; private set; } = 0.05f;
+    [field: SerializeField] public Spell SpellPrefab;
 
     public Enemy Target {
         get { return target; }
@@ -154,6 +155,13 @@ public class PlayerController : MonoBehaviour
         if (CurrentState == Walk) {
             Vector2 moveForce = axisInput * (MoveForce * 16) * Time.fixedDeltaTime;
             rb.AddForce(moveForce);
+        }
+    }
+
+    // Cast spell
+    void OnAction4() {
+        if (Target != null) {
+            Instantiate(SpellPrefab, transform);
         }
     }
 

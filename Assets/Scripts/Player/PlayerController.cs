@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -53,14 +54,14 @@ public class PlayerController : MonoBehaviour
     private CharacterState currentState;
     private AnimationClip currentClip;
     private Vector2 facingDirection;
-    private ActionBar actionBar;
     private float timeToEndAnimation = 0f;
+    private ActionBar actionBar;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        actionBar = GetComponent<ActionBar>();
         targetLock = GetComponentInChildren<TargetLock>();
+        actionBar = GetComponentInChildren<ActionBar>();
         CurrentState = Idle;
     }
 
@@ -112,20 +113,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Todo reimplement after creating action bar logic
     void OnUseTool() {
         if (CurrentState == Use || GameManager.IsPaused) {
             return;
         }
         
-        CurrentState = Use;
+        // CurrentState = Use;
 
-        ActionBarAction action = actionBar.ActionSet.ElementAt(0).Value;
+        // ActionBarAction action = actionBar.ActionSet.ElementAt(0).Value;
         
-        if (action != null) {
-            ActionBarAction actionInstance = Instantiate(action, transform.position, Quaternion.identity);
+        // if (action != null) {
+        //     ActionBarAction actionInstance = Instantiate(action, transform.position, Quaternion.identity);
 
-            actionInstance.Execute();
-        }
+        //     actionInstance.Execute();
+        // }
     }
 
     void OnTargetSwitch() {
@@ -147,12 +149,52 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Cast spell
+    void OnAction1() {
+        executeAction(0);
+    }
+
     void OnAction2() {
-        if (Target != null) {
-            Instantiate(SpellPrefab, transform);
+        executeAction(1);
+    }
+
+    void OnAction3() {
+        executeAction(2);
+    }
+
+    void OnAction4() {
+        executeAction(3);
+    }
+
+    void OnAction5() {
+        executeAction(4);
+    }
+
+    void OnAction6() {
+        executeAction(5);
+    }
+
+    void OnAction7() {
+        executeAction(6);
+    }
+
+    void OnAction8() {
+        executeAction(7);
+    }
+
+    private void executeAction(int index) {
+        Action action = actionBar.ActionSet.ElementAt(index).Value;
+
+        if (action != null) {
+            action.Execute();
         }
     }
+
+    // Cast spell
+    // void OnAction2() {
+    //     if (Target != null) {
+    //         Instantiate(SpellPrefab, transform);
+    //     }
+    // }
 
     void OnExit() {
         if (target) {

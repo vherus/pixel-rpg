@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Use",
+                    "name": "UseTool",
                     "type": "Button",
                     "id": "3fbbcec2-ae4c-4e42-8338-adb970b24517",
                     "expectedControlType": "Button",
@@ -99,6 +99,33 @@
                     "name": "Action8",
                     "type": "Button",
                     "id": "a8d8573c-d6dd-4bab-a39a-13a42fd3b971",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dodge",
+                    "type": "Button",
+                    "id": "fe0eed47-bca5-4637-9cae-f0f446aae1f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TargetSwitch",
+                    "type": "Button",
+                    "id": "130223be-84a4-4ae0-ba35-8c4d0aea9008",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Exit",
+                    "type": "Button",
+                    "id": "3a352453-d2a2-46ed-b16f-1d2b23d47bfb",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -278,7 +305,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Use",
+                    "action": "UseTool",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -289,7 +316,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
-                    "action": "Use",
+                    "action": "UseTool",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -300,7 +327,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "Use",
+                    "action": "UseTool",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -311,18 +338,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Use",
+                    "action": "UseTool",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "cc2efa61-929a-4b08-a521-9dca6e126980",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Use",
+                    "action": "UseTool",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -411,6 +438,39 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Action8",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "358a5d13-b216-4734-b7a1-f3b0f6bdd402",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49cc8fc1-4392-48df-8027-c844cd7cb1a5",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "TargetSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd45ddf6-15a2-4f8e-a573-20c2bc67705b",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Exit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

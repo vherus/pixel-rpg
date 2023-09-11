@@ -112,18 +112,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnUse() {
-        if (GameManager.IsPaused) {
+    void OnUseTool() {
+        if (CurrentState == Use || GameManager.IsPaused) {
             return;
         }
         
         CurrentState = Use;
-    }
-
-    void OnAction1() {
-        if (CurrentState == Use || GameManager.IsPaused) {
-            return;
-        }
 
         ActionBarAction action = actionBar.ActionSet.ElementAt(0).Value;
         
@@ -132,13 +126,9 @@ public class PlayerController : MonoBehaviour
 
             actionInstance.Execute();
         }
-
-        OnActionPress();
     }
 
-    // Todo, change this signature and key bind
-    // This function cycles through available targets in the order they were added to the available target list
-    void OnAction2() {
+    void OnTargetSwitch() {
         if (GameManager.AvailableTargets.Count < 1) {
             Target = null;
         } else if (!target) {
@@ -150,8 +140,7 @@ public class PlayerController : MonoBehaviour
         targetLock.Target = Target;
     }
 
-    // Dodge
-    void OnAction3() {
+    void OnDodge() {
         if (CurrentState == Walk) {
             Vector2 moveForce = axisInput * (MoveForce * 16) * Time.fixedDeltaTime;
             rb.AddForce(moveForce);
@@ -159,22 +148,17 @@ public class PlayerController : MonoBehaviour
     }
 
     // Cast spell
-    void OnAction4() {
+    void OnAction2() {
         if (Target != null) {
             Instantiate(SpellPrefab, transform);
         }
     }
 
-    // Clear target
-    void OnAction8() {
+    void OnExit() {
         if (target) {
             target.GetComponentInChildren<TargetIndicator>().GetComponent<SpriteRenderer>().enabled = false;
             target = null;
             targetLock.Target = null;
         }
-    }
-
-    void OnActionPress() {
-        OnUse();
     }
 }

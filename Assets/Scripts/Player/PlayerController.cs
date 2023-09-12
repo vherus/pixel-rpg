@@ -61,11 +61,25 @@ public class PlayerController : MonoBehaviour
     private ActionBar actionBar;
     private bool isRunning = false;
 
+    private bool isTargetBelow = false;
+    private bool isTargetAbove = false;
+    private bool isTargetLeft = false;
+    private bool isTargetRight = false;
+
+    private Vector2 DIRECTION_DOWN = new Vector2(0, -1);
+    private Vector2 DIRECTION_LEFT = new Vector2(-1, 0);
+    private Vector2 DIRECTION_RIGHT = new Vector2(1, 0);
+    private Vector2 DIRECTION_UP = new Vector2(0, 1);
+
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         targetLock = GetComponentInChildren<TargetLock>();
         actionBar = GetComponentInChildren<ActionBar>();
         CurrentState = Idle;
+    }
+
+    void Awake() {
+        InputSystem.Update();
     }
 
     void Update()
@@ -83,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
         if (CurrentState.CanExitWhilePlaying || timeToEndAnimation <= 0) {
             if (axisInput != Vector2.zero && rb.velocity.magnitude > WalkVelocityThreshold) {
-                if (isRunning) {
+                if (isRunning && !isMovingBackwards()) {
                     CurrentState = Run;
                 } else {
                     CurrentState = Walk;
@@ -109,7 +123,8 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate() {
         if (CurrentState.CanMove) {
             Vector2 moveForce;
-            if (isRunning) {
+
+            if (isRunning && !isMovingBackwards()) {
                 moveForce = axisInput * RunForce * Time.fixedDeltaTime;
             } else {
                 moveForce = axisInput * MoveForce * Time.fixedDeltaTime;
@@ -117,6 +132,14 @@ public class PlayerController : MonoBehaviour
 
             rb.AddForce(moveForce);
         }
+    }
+
+    private bool isMovingBackwards() {
+        return
+            (Target != null && axisInput.x == 1 && facingDirection.x == -1) ||
+            (Target != null && axisInput.x == -1 && facingDirection.x == 1) ||
+            (Target != null && axisInput.y == 1 && facingDirection.y == -1) ||
+            (Target != null && axisInput.y == -1 && facingDirection.y == 1);
     }
 
     void OnRun(InputValue value) {
@@ -129,26 +152,26 @@ public class PlayerController : MonoBehaviour
             float x = playerRelativeToTarget.x;
             float y = playerRelativeToTarget.y;
  
-            bool isTargetBelow = y > 0 && (x > -y && x < y);
+            isTargetBelow = y > 0 && (x > -y && x < y);
             if (isTargetBelow) {
-                facingDirection = new Vector2(0, -1);
+                facingDirection = DIRECTION_DOWN;
             }
     
-            bool isTargetLeft = x > 0 && (y > -x && y < x);
+            isTargetLeft = x > 0 && (y > -x && y < x);
             if(isTargetLeft) {
-                facingDirection = new Vector2(-1, 0);
+                facingDirection = DIRECTION_LEFT;
             }
     
-            bool isTargetRight = x < 0 && (y > x && y < -x);
+            isTargetRight = x < 0 && (y > x && y < -x);
             if(isTargetRight) {
-                facingDirection = new Vector2(1, 0);
+                facingDirection = DIRECTION_RIGHT;
             }
     
-            bool isTargetAbove = y < 0 && (x > y && x < -y);
+            isTargetAbove = y < 0 && (x > y && x < -y);
             if(isTargetAbove) {
-                facingDirection = new Vector2(0, 1);
+                facingDirection = DIRECTION_UP;
             }
-            
+
             return;
         }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
                 CurrentState = Idle;
             }
 
+            setFacingDirection(axisInput);
             ChangeClip();
         }
     }
@@ -112,7 +114,7 @@ public class PlayerController : MonoBehaviour
             } else {
                 moveForce = axisInput * MoveForce * Time.fixedDeltaTime;
             }
-            
+
             rb.AddForce(moveForce);
         }
     }
@@ -121,12 +123,44 @@ public class PlayerController : MonoBehaviour
         isRunning = value.isPressed;
     }
 
-    void OnMove(InputValue value) {
-        axisInput = value.Get<Vector2>();
+    void setFacingDirection(Vector2 axisInput) {
+        if (axisInput != Vector2.zero && Target != null) {
+            Vector2 playerRelativeToTarget = transform.position - Target.transform.position;
+            float x = playerRelativeToTarget.x;
+            float y = playerRelativeToTarget.y;
+ 
+            bool isTargetBelow = y > 0 && (x > -y && x < y);
+            if (isTargetBelow) {
+                facingDirection = new Vector2(0, -1);
+            }
+    
+            bool isTargetLeft = x > 0 && (y > -x && y < x);
+            if(isTargetLeft) {
+                facingDirection = new Vector2(-1, 0);
+            }
+    
+            bool isTargetRight = x < 0 && (y > x && y < -x);
+            if(isTargetRight) {
+                facingDirection = new Vector2(1, 0);
+            }
+    
+            bool isTargetAbove = y < 0 && (x > y && x < -y);
+            if(isTargetAbove) {
+                facingDirection = new Vector2(0, 1);
+            }
+            
+            return;
+        }
 
         if (axisInput != Vector2.zero) {
             facingDirection = axisInput;
         }
+    }
+
+    void OnMove(InputValue value) {
+        axisInput = value.Get<Vector2>();
+
+        setFacingDirection(axisInput);
     }
 
     // Todo reimplement after creating action bar logic
@@ -161,6 +195,7 @@ public class PlayerController : MonoBehaviour
     void OnDodge() {
         if (CurrentState == Walk) {
             Vector2 moveForce = axisInput * (MoveForce * 16) * Time.fixedDeltaTime;
+
             rb.AddForce(moveForce);
         }
     }

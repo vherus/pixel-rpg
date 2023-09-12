@@ -12,6 +12,7 @@ public class UIController : MonoBehaviour
 
     void OnInventory() {
         GameManager.PauseUnpause();
+        GameManager.IsInMenu = !GameManager.IsInMenu;
 
         EquipmentPanel.SetActive(!EquipmentPanel.activeSelf);
     }

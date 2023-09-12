@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
     public static bool IsPaused { get; private set; } = false;
+    public static bool IsInMenu { get; set; } = false;
     public static NavigationList<Enemy> AvailableTargets { get; set; } = new();
 
     public static GameManager Instance {

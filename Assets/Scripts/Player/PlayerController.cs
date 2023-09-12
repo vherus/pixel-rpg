@@ -6,11 +6,14 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [field: SerializeField] public float MoveForce { get; private set; } = 250f;
+    [field: SerializeField] public float RunForce { get; private set; } = 280f;
     [field: SerializeField] public CharacterState Idle { get; private set; }
     [field: SerializeField] public CharacterState Walk { get; private set; }
     [field: SerializeField] public CharacterState Use { get; private set; }
+    [field: SerializeField] public CharacterState Run { get; private set; }
     [field: SerializeField] public StateAnimationSetDictionary StateAnimations { get; private set; }
     [field: SerializeField] public float WalkVelocityThreshold { get; private set; } = 0.05f;
+    [field: SerializeField] public Animator Animator { get; private set; }
     [field: SerializeField] public Spell SpellPrefab;
 
     public Enemy Target {
@@ -50,16 +53,15 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 axisInput = Vector2.zero;
     private Rigidbody2D rb;
-    private Animator animator;
     private CharacterState currentState;
     private AnimationClip currentClip;
     private Vector2 facingDirection;
     private float timeToEndAnimation = 0f;
     private ActionBar actionBar;
+    private bool isRunning = false;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         targetLock = GetComponentInChildren<TargetLock>();
         actionBar = GetComponentInChildren<ActionBar>();
         CurrentState = Idle;
@@ -80,7 +82,11 @@ public class PlayerController : MonoBehaviour
 
         if (CurrentState.CanExitWhilePlaying || timeToEndAnimation <= 0) {
             if (axisInput != Vector2.zero && rb.velocity.magnitude > WalkVelocityThreshold) {
-                CurrentState = Walk;
+                if (isRunning) {
+                    CurrentState = Run;
+                } else {
+                    CurrentState = Walk;
+                }
             } else {
                 CurrentState = Idle;
             }
@@ -93,16 +99,26 @@ public class PlayerController : MonoBehaviour
         AnimationClip expectedClip = StateAnimations.GetFacingClipFromState(CurrentState, facingDirection);
 
         if (currentClip == null || currentClip != expectedClip) {
-            animator.Play(expectedClip.name);
+            Animator.Play(expectedClip.name);
             currentClip = expectedClip;
         }
     }
 
     void FixedUpdate() {
         if (CurrentState.CanMove) {
-            Vector2 moveForce = axisInput * MoveForce * Time.fixedDeltaTime;
+            Vector2 moveForce;
+            if (isRunning) {
+                moveForce = axisInput * RunForce * Time.fixedDeltaTime;
+            } else {
+                moveForce = axisInput * MoveForce * Time.fixedDeltaTime;
+            }
+            
             rb.AddForce(moveForce);
         }
+    }
+
+    void OnRun(InputValue value) {
+        isRunning = value.isPressed;
     }
 
     void OnMove(InputValue value) {
